@@ -8,20 +8,16 @@ from sklearn.preprocessing import StandardScaler
 # Carregar o conjunto de dados
 df = pd.read_csv('melb_data.csv')
 
-# Selecionar as variáveis relevantes (substituir pelos dados do Iris para a demonstração)
 iris = datasets.load_iris()
 X = iris.data[:, 2:4]  # Usar "petal length" e "petal width"
 y = iris.target
 
-# Selecionar apenas as classes 0 (Iris setosa) e 1 (Iris versicolor)
 X = X[y != 2]
 y = y[y != 2]
 
-# Adicionar o ponto [3, 1.5] do tipo Iris setosa
 X = np.vstack([X, [3, 1.5]])
 y = np.append(y, 0)
 
-# Escalar as características
 scaler = StandardScaler()
 X_scaled = scaler.fit_transform(X)
 
@@ -39,19 +35,16 @@ def plot_svm_decision_boundary(model, X, y, title):
     plt.title(title)
     plt.show()
 
-# Ajustar o modelo de SVM de margens rígidas
 svm_hard = SVC(kernel='linear', C=1e10)
 svm_hard.fit(X_scaled, y)
 plot_svm_decision_boundary(svm_hard, X_scaled, y, 'SVM de Margens Rígidas')
 
-# Ajustar modelos de SVM de margens suaves para diferentes valores de C
 C_values = [1, 10, 100, 1000]
 for C in C_values:
     svm_soft = SVC(kernel='linear', C=C)
     svm_soft.fit(X_scaled, y)
     plot_svm_decision_boundary(svm_soft, X_scaled, y, f'SVM de Margens Suaves (C={C})')
 
-# Ajustar modelos de SVM não lineares com Kernel Polinomial e Gaussiano
 svm_poly = SVC(kernel='poly', degree=3, C=1)
 svm_poly.fit(X_scaled, y)
 plot_svm_decision_boundary(svm_poly, X_scaled, y, 'SVM com Kernel Polinomial')
@@ -60,7 +53,6 @@ svm_rbf = SVC(kernel='rbf', gamma=1, C=1)
 svm_rbf.fit(X_scaled, y)
 plot_svm_decision_boundary(svm_rbf, X_scaled, y, 'SVM com Kernel Gaussiano')
 
-# Ajustar modelos de SVM não linear com Kernel Gaussiano para diferentes valores de gamma e C
 gamma_values = [0.1, 1, 10]
 C_values = [1, 10, 100, 1000]
 for gamma in gamma_values:
