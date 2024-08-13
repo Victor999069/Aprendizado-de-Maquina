@@ -1,27 +1,26 @@
 import pandas as pd
-import numbers as np
-import matplotlib.pyplot as plt
-import statsmodels.formula.api as sm
-import scipy.stats as stats
-import seaborn as sns
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import GaussianNB
+from sklearn.preprocessing import LabelEncoder
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, classification_report
+from yellowbrick.classifier import ConfusionMatrix
 
-base = pd.read_csv('mt_cars.csv')
+base = pd.read_csv('insurance.csv')
 base = base.drop(['Unnamed: 0'], axis=1)
-print(base.head())
+print(base)
 
-# corr = base.corr()
-# sns.heatmap(corr, cmap='coolwarm', annot=True, fmt='.2f')
-# plt.show()
+y = base.iloc[:,7].values
+x = base.iloc[:,[0,1,2,3,4,5,6,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26]].values
 
-colunas = [('mpg', 'hp'), ('mpg', 'drat'), ('mpg', 'cyl'), ('mpg', 'wt')]
-plots = len(colunas)
+Labelencoder = LabelEncoder()
 
-fig, axes = plt.subplots(nrows=plots, ncols=1, figsize=(4,4 * plots))
+for i in range(x.shape[1]):
+    if x[:,i].dtype == 'object':
+        x[:,i] = Labelencoder.fit_transform(x[:,i])
 
-for i, pair in enumerate(colunas):
-    x_col, y_col = pair
-    sns.scatterplot(x=x_col, y=y_col, data=base, ax=axes[i])
-    axes[i].set_title(f'{x_col} vs {y_col}')
+x_treinamento, x_teste, y_treinamento, y_teste = train_test_split(x,y,test_size=0.3, random_state=1)
 
-plt.tight_layout()
-plt.show()
+modelo = GaussianNB()
+modelo.fit(x_treinamento,y_treinamento)
+
+previsao = modelo.predict(x_teste)
