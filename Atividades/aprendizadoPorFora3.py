@@ -35,10 +35,6 @@ X_treinamento, X_teste, y_treinamento, y_teste = train_test_split(X, y, test_siz
 modelo = DecisionTreeClassifier(random_state=1, max_depth=8)
 modelo.fit(X_treinamento, y_treinamento)
 
-#dot_data = export_graphviz(modelo, out_file=None, filled=True, feature_names=base.columns[: -1], class_names=True, rounded=True)
-#graph = graphviz.Source(dot_data)
-#graph.render("decision_tree", format="png")
-#graph.view()
 
 
 previsoes = modelo.predict(X_teste)
